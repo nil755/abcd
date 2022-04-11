@@ -1,0 +1,274 @@
+SQL : It is a structured query language used to perform CRUD operations
+	on the data.
+
+CRUD Operation: Create, Read, Update, Delete
+	+ Create : create/add new data
+	+ Read : read or access the existing data in database
+	+ Update: update or modify the existing data
+	+ Delete: delete existing data
+
+Normalization/Denormalization:
+	+ Normalization is the process of deviding a large data set/table into small
+	data sets/tables.
+	+ Denormalization is the process of merging number of data sets/tables 
+	into single data set/table
+
+# Statements in SQL :
+-DDL[Data definition language] 		--> create, alter, drop, truncate  	--> to create the structure
+-DML[Data manipulation language] 	--> select, insert, delete, update 	--> to add/modify data
+-DCL[Data control language] 		--> grant, revoke 			--> to give permissions to user
+-TCL[transaction control language] 	--> commit, rollback  			--> to save the changes 
+
+Create : it is used to create a table
+Syntax : create table <table name>(<column name><datatype>,------,-----,)
+e.g. create table petstore (id int, name varchar(20), category varchar(20), status varchar(20));
+
+
+Insert : it is used to insert data in existing table
+Syntax: insert into <table name> values (101, 'Thor', 'Dog', 'Available');
+
+
+---------------------------------------------------------------------------------------------- Session 2
+Select : it is used to fetch/read the data from database/table
+Syntax: Select * from <table name>            ------ (* means all the columns in the table)
+	Select id1, name1 from <table name>   ----(Only two column i.e. id1 and name1 data will be fetched)
+
+To fetch specific data [Where clause]
+Syntax: Select * from <tableName> where <Column name> = 'condition'
+e.g. select * from world where continent = 'Asia' and population > 200000000;
+
+Select with IN and NOT IN clause
+Syntax: Select * from <tableName> where <columnNmae> IN (values)
+e.g. select * from world where continent IN ('Asia','Africa','America') and population > 200000000;
+     select * from world where continent NOT IN ('Asia','Africa','South America') and population > 20000000;
+
+How to fetch unique data
+Syntax: select DISTINCT (*) from <tableName>;   ---(UNIQUE keyword can aldo be used)
+
+Select with ORDER BY clause
+Syntax: select * from <tableName> order by <columnName> ; --(Order by should be used at the last)
+	e.g. select distinct continent from world order by population ;
+
+	select * from <tbaleName> order by <columnName> desc;  ---(data will be in descending order)
+	e.g. select distinct continent from world order by population desc;
+
+LIKE Operator : it is used to compare partial condition
+Syntax: select * from <tableName> where <columnNmae> like '%condition%';
+	e.g. select * from world where continent like 'As%'  --- (Continent starts with 'As')
+	e.g. select * from world where continent like '%ia'  --- (Continent ends with 'ia')
+	e.g. select * from world where continent like '%si%' --- (continent having 'si')
+	e.g. select * from world where continent like 'As__' --- (Continent having 4 chara and starts with 'As', _ used for missing chara)
+
+
+----------------------------------------------------------------------- Session 3
+UPDATE : it is used to update the data in table
+Syntax : update <tableName> set <columnName> = condition where <columnName>= condition
+	e.g update world set CONTINENT = 'Africa' where GDP = 8;
+	    update world set POPULATION= 587128794 where ContryName = 'China';
+
+DELETE : it is used to remove/delete perticular row
+Syntax: delete from <tableName> where <columnNmae> = condition
+	e.g. delete from world where GDP = 6;
+
+TRUNCATE: it is used to delet all the data from table
+Synatax: truncate table <tableName>
+	e.g. truncate table world;
+
+DROP : it is used to delete data as well as structure
+Syntax: drop table <tableName>
+	e.g. drop table world;
+
+PURGE: it is used to permanently delete everything
+Syntax: purge table <tableName>
+	e.g. purge table world;
+
+
+---------------------------------------------------------------------Session 4
+ALTER : it is used to add, drop, modify columns[structure]
+- To add a column
+Syntax: alter table <tableNmae> add <columnName, dataType>
+	e.g. alter table world add Ranking int;
+
+- To delete a column
+Syntax: alter table <tableName> drop column <ColumnName>
+	e.g. alter table world drop column Ranking;
+
+- To modify column
+Syntax: alter table <tableName> modify <columnName, dataType>
+	e.g. alter table world modify Ranking varchar(15);
+
+- To rename column
+Syntax: alter table <tableName> rename column <columnNmae> to <new ColumnName>
+	e.g alter table userInfo rename column pincode to pincode1;  
+
+DESCRIBE : it is used to see table structure like datatype etc.
+Syntax: describe <tableName>;
+
+AGGREGATE FUNCTIONS:
+- max : it is used to get maximum value of the attribute
+Syntax: select max(<column name>) from <table name>;
+	e.g.select max(population) from world; 
+
+- min : it is used to get minimum value of the attribute
+	e.g. select min(population) from world;
+
+- avg : it is used to get average of the values in column
+	e.g select avg(population) from world; 
+
+- sum : it is used to sum all the values in the column
+	e.g. select sum(population) from world;
+
+- count : it is used to count number of rows in a table
+	e.g. select count(*) from world;
+
+GROUP BY Clause: it is  used to fetch the data according to group [we only use while using aggregate functions]
+Syntax : select avg(<columnNmae>) from <tableName> group by <columnName>
+	e.g. select avg(population), continent from world group by continent;
+
+
+------------------------------------------------------------------------------------- Session 5
+JOIN : it is used to join multiple tables 
+Syntax : select * from <table1> join <table2> on <table1.column> = <table2.column>
+	e.g. select * from game join goal on game.id = goal.matchid;
+	e.g. select game.id, goal.teamid from game join goal on game.id = goal.matchid; <--- without allises
+
+JOIN with allises:
+- Allises are temperory and used to give short name to the table/column
+For column: 
+Syntax: select population as pop, continent as con from world;
+For table:
+Syntax: select g.id, gg.teamid from game g join goal gg on g.id = gg.matchid;   <--- with allises
+
+INNER JOIN : to get common data from two or more than twpo tables
+Syntax: select <table1.Column1>, <table2.column1> from table1 inner join table2 on table1.column = table2.column
+	select game.id, goal.teamid from game inner join goal on game.id = goal.matchid;
+
+LEFT JOIN : to get common data from two table and all all the data from 1st[left] table
+Syntax: select <table1.Column1>, <table2.column1> from table1 left join table2 on table1.column = table2.column
+
+RIGHT JOIN: to get common data from two tables and all the data from 2nd[right] table
+Syntax: select <table1.Column1>, <table2.column1> from table1 right join table2 on table1.column = table2.column
+
+FULL JOIN : to get all the data
+Syntax: select <table1.Column1>, <table2.column1> from table1 full join table2 on table1.column = table2.column
+
+SELF JOIN : to compare data of the single[self] table and get output
+Syntax: select <a.columnName>, <b.columnNmae> from <tableName> a join <tableName> b on a.<columnName> = b.<columnName>;
+select aa.EmpName as manager, mm.EMPNAME as employee from employee aa join employee mm on aa.EMPID = mm.MANID;
+
+
+
+--------------------------------------------------------------------------------- Session 6
+Constraint In SQL : rukes and regulation we apply while inserting data
+1. Not NUll / Null
+- columns for which we need data compulsory, Not Null constraint will be used
+- column for which data is not available, Null will  be used
+
+2. Primary Key : it is a contraint which is used while inserting data or creating table, it has following properties
+- It has a unique value
+- Duplicate values are not acceptable
+- Only one primary key is allowed in table
+- NUll values are not allowed
+
+3. Foriegn Key : it is a contraint which is used while inserting data or creating table, it has following properties
+- More than one Foreign key is allowed in table
+- NUll values are allowed
+
+4. Unique Key : it is a contraint which is used while inserting data or creating table, it has following properties
+- More than one Unique key is allowed in table
+- NUll values are allowed
+- Duplication is not allowed
+
+5. Default : it is used to set default value for perticular column
+	e.g. salary default 10000
+
+6. Check : it is used to verify that condition is fullfilled while inserting the data
+	e.g. check (age > 18)
+
+
+--------------------------------------------------------------------------------------Session 7
+HOW TO GET 2ND HIGHEST SALARY: 
+- select max(salary) from employee where salary not in (select max(salary) from employee);
+
+- select max(salary) from employee where salary < (select max(salary) from employee);
+
+- select max(salary) from employee w1 where 2 <= (select count(salary) from employee w2
+                                                where w1.salary <= w2.salary);
+- select population from world where rownum < 3 order by population desc;
+
+HOW TO GET 3RD MIN SALARY:
+select min(salary) from employee w1 where 3 >= (select count(salary) from employee w2   where w1.salary <= w2.salary);
+
+
+HAVING CLAUSE : It is used to provide condition with GROUP BY clause
+Syntax : select count(*) from <tableName> group by <columnNmae> having count(*) < <value>;
+SELECT count(*),  MANID FROM EMPLOYEE GROUP BY MANID having count(*) > 2;
+--------------------------------------------- Thank you---------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
